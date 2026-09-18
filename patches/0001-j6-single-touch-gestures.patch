@@ -1,0 +1,241 @@
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -322,10 +322,12 @@
+     // Non-blocking + poll so we can notice a capture pause while idle.
+     set_nonblocking(device.as_raw_fd());
+     let ranges = stick_ranges(device);
+-    let touch_device = device.properties().contains(evdev::PropType::DIRECT)
+-        || device
+-            .supported_absolute_axes()
+-            .is_some_and(|a| a.contains(evdev::AbsoluteAxisType::ABS_MT_POSITION_X));
++    let direct = device.properties().contains(evdev::PropType::DIRECT);
++    let axes = device.supported_absolute_axes();
++    let multitouch = axes.is_some_and(|a| a.contains(evdev::AbsoluteAxisType::ABS_MT_POSITION_X));
++    let absolute_xy = axes.is_some_and(|a| a.contains(evdev::AbsoluteAxisType::ABS_X)
++        && a.contains(evdev::AbsoluteAxisType::ABS_Y));
++    let touch_button = device.supported_keys().is_some_and(|k| k.contains(evdev::Key::BTN_TOUCH));
+     let mut grab = grab;
+     let mut grabbed = grab;
+ 
+@@ -371,6 +373,9 @@
+                 }
+             }
+         }
++
++        let touch_device = touch_gesture_mode(direct, multitouch, touch_button,
++            absolute_xy, !cfg.gesture_mappings.is_empty());
+ 
+         // Release the grab while capture is paused, restore it after.
+         let paused = pause::active();
+@@ -559,3 +564,13 @@
+     }
+ }
+ 
++
++// Recorded gestures explicitly opt a single-touch remote into the gesture path.
++// BTN_TOUCH alone must still work as a normal button on other remotes.
++fn touch_gesture_mode(direct: bool, multitouch: bool, touch_button: bool,
++    absolute_xy: bool, configured: bool) -> bool {
++    direct || multitouch || (configured && touch_button && absolute_xy)
++}
++
++#[cfg(test)]
++mod j6_regression;
+--- /dev/null
++++ b/src/j6_regression.rs
+@@ -0,0 +1,58 @@
++use super::*;
++
++#[test]
++fn j6_recorded_gestures_work_without_panel_properties() {
++    // Observed Kindle properties=0, ABS_X/Y, BTN_TOUCH; E20 gesture bindings exist.
++    assert!(touch_gesture_mode(false, false, true, true, true));
++}
++
++#[test]
++fn ordinary_centre_button_and_unconfigured_remotes_keep_key_handling() {
++    assert!(!touch_gesture_mode(false, false, true, true, false));
++    assert!(!touch_gesture_mode(false, false, true, false, true));
++    assert!(!touch_gesture_mode(false, false, false, true, true));
++    assert!(touch_gesture_mode(true, false, true, true, false));
++    assert!(touch_gesture_mode(false, true, true, false, false));
++    // Changing the configured bindings switches the decision without a reconnect.
++    assert!(touch_gesture_mode(false, false, true, true, true));
++    assert!(!touch_gesture_mode(false, false, true, true, false));
++}
++
++#[test]
++fn six_recorded_presses_match_only_on_completed_release() {
++    let cfg = config::Config::load(concat!(env!("CARGO_MANIFEST_DIR"),
++        "/fixtures/e20-kindlemappings.ini")).unwrap();
++    let touch = touch_gesture_mode(false, false, true, true, true);
++    let mut stroke = gesture::Stroke::default();
++    let mut matched = Vec::new();
++    let ranges = HashMap::from([(0u16, (500, 500)), (1u16, (500, 500))]);
++    for line in include_str!("../fixtures/e03-abs-xy-events.txt").lines() {
++        let v: Vec<i32> = line.split_whitespace().map(|x| x.parse().unwrap()).collect();
++        let before = matched.len();
++        if touch {
++            match (v[0], v[1], v[2]) {
++                (1, 330, 1) => stroke.press(),
++                (1, 330, 0) => {
++                    if let Some(path) = stroke.release() {
++                        if gesture::travel(&path) >= cfg.gesture_min_percent as f32 {
++                            let (name, distance) = gesture::nearest(&path, &cfg.gesture_templates).unwrap();
++                            assert!(distance <= cfg.gesture_tolerance, "{name}: {distance}");
++                            matched.push(name.to_owned());
++                        }
++                    }
++                },
++                (3, code @ (0 | 1), value) =>
++                    stroke.axis(code == 0, stick_percent(&ranges, code as u16, value)),
++                (0, 0, _) => stroke.sync(),
++                _ => {},
++            }
++        }
++        if v != [1, 330, 0] { assert_eq!(matched.len(), before); }
++    }
++    assert_eq!(matched, ["j6_left", "j6_left", "j6_left",
++        "j6_right", "j6_right", "j6_right"]);
++    // Synthetic negative control: stationary contact is not a directional swipe.
++    stroke.press(); stroke.axis(true, 0); stroke.axis(false, 0); stroke.sync();
++    assert!(gesture::travel(&stroke.release().unwrap()) < cfg.gesture_min_percent as f32);
++    assert!(stroke.release().is_none());
++}
+--- /dev/null
++++ b/fixtures/e03-abs-xy-events.txt
+@@ -0,0 +1,103 @@
++1 330 1
++3 0 300
++3 1 505
++0 0 0
++3 0 340
++3 1 500
++0 0 0
++3 0 380
++3 1 505
++0 0 0
++3 0 420
++3 1 500
++0 0 0
++3 0 800
++3 1 505
++0 0 0
++1 330 0
++0 0 0
++1 330 1
++3 0 300
++0 0 0
++3 0 340
++3 1 500
++0 0 0
++3 0 380
++3 1 505
++0 0 0
++3 0 420
++3 1 500
++0 0 0
++3 0 800
++3 1 505
++0 0 0
++1 330 0
++0 0 0
++1 330 1
++3 0 300
++0 0 0
++3 0 340
++3 1 500
++0 0 0
++3 0 380
++3 1 505
++0 0 0
++3 0 420
++3 1 500
++0 0 0
++3 0 800
++3 1 505
++0 0 0
++1 330 0
++0 0 0
++1 330 1
++3 0 700
++0 0 0
++3 0 660
++3 1 500
++0 0 0
++3 0 620
++3 1 505
++0 0 0
++3 0 580
++3 1 500
++0 0 0
++3 0 200
++3 1 505
++0 0 0
++1 330 0
++0 0 0
++1 330 1
++3 0 700
++0 0 0
++3 0 660
++3 1 500
++0 0 0
++3 0 620
++3 1 505
++0 0 0
++3 0 580
++3 1 500
++0 0 0
++3 0 200
++3 1 505
++0 0 0
++1 330 0
++0 0 0
++1 330 1
++3 0 700
++0 0 0
++3 0 660
++3 1 500
++0 0 0
++3 0 620
++3 1 505
++0 0 0
++3 0 580
++3 1 500
++0 0 0
++3 0 200
++3 1 505
++0 0 0
++1 330 0
++0 0 0
+--- /dev/null
++++ b/fixtures/e20-kindlemappings.ini
+@@ -0,0 +1,24 @@
++
++[settings]
++debounce_ms = 0
++log_buttons = false
++long_press_ms = 500
++repeat_ms = 100
++keep_awake = false
++stick_deadzone = 50
++gesture_min_percent = 15
++gesture_tolerance = 0.30
++
++[device.yiser_j6]
++name = Yiser-J6
++uniq = 02:00:00:00:00:06
++grab = true
++passthrough = false
++
++[gestures]
++j6_left = -0.997,0.010 -0.933,0.002 -0.869,-0.006 -0.805,-0.006 -0.741,0.002 -0.677,0.009 -0.613,0.001 -0.549,-0.007 -0.485,-0.010 -0.420,-0.009 -0.356,-0.008 -0.291,-0.007 -0.226,-0.007 -0.162,-0.006 -0.097,-0.005 -0.033,-0.004 0.032,-0.003 0.096,-0.002 0.161,-0.001 0.225,-0.001 0.290,0.000 0.355,0.001 0.419,0.002 0.484,0.003 0.548,0.004 0.613,0.004 0.677,0.005 0.742,0.006 0.806,0.007 0.871,0.008 0.935,0.009 1.000,0.010
++j6_right = 0.997,0.010 0.933,0.002 0.869,-0.006 0.805,-0.006 0.741,0.002 0.677,0.009 0.613,0.001 0.549,-0.007 0.485,-0.010 0.420,-0.009 0.356,-0.008 0.291,-0.007 0.226,-0.007 0.162,-0.006 0.097,-0.005 0.033,-0.004 -0.032,-0.003 -0.096,-0.002 -0.161,-0.001 -0.225,-0.001 -0.290,0.000 -0.355,0.001 -0.419,0.002 -0.484,0.003 -0.548,0.004 -0.613,0.004 -0.677,0.005 -0.742,0.006 -0.806,0.007 -0.871,0.008 -0.935,0.009 -1.000,0.010
++
++[device.yiser_j6.gestures]
++j6_left = /mnt/us/kindle-button-mapper/scripts/koreader.sh prev_page
++j6_right = /mnt/us/kindle-button-mapper/scripts/koreader.sh next_page
+--- /dev/null
++++ b/fixtures/README.md
+@@ -0,0 +1 @@
++E03 actual Arch touch trace projected to ABS_X/Y, BTN_TOUCH and SYN_REPORT only; MT duplicates omitted to match observed Kindle capabilities. This is not a raw Kindle event capture. Axis ranges0..1000 are observed Arch metadata. Templates are the actual saved Kindle E20 config. No books or keys.

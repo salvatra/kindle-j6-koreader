@@ -1,0 +1,38 @@
+{
+  "base_commit": "fa3a851ef1d26f3045ef27c7dc3465e45d56de14",
+  "public_patch_sha256": "a3f713c56b7842588ca5fc614f0125e99221ea152be4c6aabb54d68444bd591b",
+  "baseline": "42 passed; 3 failed (expected)",
+  "patched": "45 passed; 0 failed",
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+  "hardware_access": "none",
+  "binary_sha256": "06672cb00e021eac28e3862e20af0240f557b7f479c85fd8b233c06c7983f741",
+  "binary_bytes": 754988,
+  "target": "armv7-unknown-linux-musleabihf",
+  "static": true,
+  "equals_historical_binary": false,
+  "checked_on": "2026-09-18",
+  "host": "Arch Linux x86_64",
+  "helper_tests": {
+    "passed": 12,
+    "hardware_access": "none; fixture/mock tests only"
+  },
+  "interpretation": "Fresh public build; not installed on the reference Kindle. Historical hardware results apply to the separately recorded deployed binary.",
+  "build_id": "fa3a851-e21-j6",
+  "initial_ci": {
+    "runner": "ubuntu-24.04",
+    "conclusion": "success",
+    "helper_tests_passed": 12,
+    "baseline": "42 passed; 3 failed (expected)",
+    "patched": "45 passed; 0 failed",
+    "binary_sha256": "be7b1a4a5aa406115d4ffb0498d378b6e2180cc3dbafbcc7e2c89c06fc9e9fa1",
+    "binary_bytes": 755228,
+    "static": true,
+    "target": "armv7-unknown-linux-musleabihf",
+    "build_id": "fa3a851-e21-j6",
+    "hardware_access": "none",
+    "equals_arch_build": false,
+    "equals_historical_binary": false,
+    "checked_on": "2026-09-18"
+  }
+}

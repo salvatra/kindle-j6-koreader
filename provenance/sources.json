@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "https://github.com/zampierilucas/kindle-button-mapper-rs",
+    "commit": "fa3a851ef1d26f3045ef27c7dc3465e45d56de14",
+    "url": "https://api.github.com/repos/zampierilucas/kindle-button-mapper-rs/tarball/fa3a851ef1d26f3045ef27c7dc3465e45d56de14",
+    "sha256": "e0d1d767ed00475da0079fef0c33a25a2b27bf3f6834dacf2af2ae3659d5fe70"
+  },
+  "rust_version": "1.98.1",
+  "toolchain": [
+    {
+      "url": "https://static.rust-lang.org/dist/rustc-1.98.1-x86_64-unknown-linux-gnu.tar.xz",
+      "sha256": "e974f036b28565f37c0f3bd92ddefa809bee16c04f9dcf07b9ed96e05aaaf7c4",
+      "bytes": 79727616
+    },
+    {
+      "url": "https://static.rust-lang.org/dist/rust-std-1.98.1-x86_64-unknown-linux-gnu.tar.xz",
+      "sha256": "fa3ff450172a16c026944030230c5069947af93c728d9179971d44e5e0cfb561",
+      "bytes": 30715684
+    },
+    {
+      "url": "https://static.rust-lang.org/dist/rust-std-1.98.1-armv7-unknown-linux-musleabihf.tar.xz",
+      "sha256": "dd0efa4210a6da6350a6b05d8ffa43eae4baecf2397cc00a3b028bdf56cdb1ce"
+    },
+    {
+      "url": "https://static.rust-lang.org/dist/cargo-1.98.1-x86_64-unknown-linux-gnu.tar.xz",
+      "sha256": "ea1de9f9e23107d97ee2b41a72c552f34064a593da503789218387aee59f3ba4"
+    }
+  ],
+  "target": "armv7-unknown-linux-musleabihf",
+  "build_id": "fa3a851-e21-j6",
+  "patch": {
+    "path": "patches/0001-j6-single-touch-gestures.patch",
+    "sha256": "a3f713c56b7842588ca5fc614f0125e99221ea152be4c6aabb54d68444bd591b",
+    "original_deployed_patch_sha256": "88d1dc0d942ceafdd67fc26745edefeffcd1c8a6bade2e1ff4051d5c620ccdd3",
+    "difference": "Only fixture Bluetooth identity replaced with 02:00:00:00:00:06; production code and gesture samples unchanged."
+  },
+  "historical_installed_binary": {
+    "sha256": "f3a5f7951fab9cd07aeaeb1e3c709003b555dc5b759411488d1ac162aa8caf55",
+    "bytes": 755692,
+    "match_claim": "Historical device build; compare with fresh output before claiming byte equality."
+  },
+  "upstream_binary_sha256": "2fb64c8fcff3dceaa34009f932d71351d24dcbf4a72dc5b596f2be6254fbef28",
+  "khp": {
+    "tag": "v3.16.0",
+    "commit": "966037ee3d9c81792793b8c684b0c420d4ee3ef5",
+    "asset": "kindle-hid-passthrough.kpkg",
+    "url": "https://github.com/zampierilucas/kindle-hid-passthrough/releases/download/v3.16.0/kindle-hid-passthrough.kpkg",
+    "sha256": "5ad0c96f7d44362833b11e327a3548f1915c1c88a2bc130963cc4e6ba26e69b0"
+  }
+}
