@@ -1,5 +1,14 @@
 # Changelog
 
+## Setup closure and evidence — 2026-09-19
+
+- Confirm seven actual suspends without failures, including about 8 h 36 min asleep.
+- Record owner acceptance and unchanged displayed overnight charge, with controlled
+  battery comparisons explicitly unmeasured.
+- Record verified SSH closure and preserved Bluetooth/mapper reading services.
+- Catalog installed components, retained backups, daily use and future maintenance.
+- Update acceptance to 12 full passes; keep four partially tested/unmeasured cases clear.
+
 ## Initial source publication — 2026-09-18
 
 - Preserve the opt-in single-touch gesture fix against mapper v1.6.0.
@@ -9,4 +18,4 @@
 - Document upstream credit, manual daily/reboot startup, failures, recovery and rollback.
 - Record 11 passed hardware acceptance cases and five pending cases.
 
-This is not a prebuilt release or a claim that battery/suspend acceptance is complete.
+The initial publication did not include a prebuilt release or completed battery/suspend acceptance.

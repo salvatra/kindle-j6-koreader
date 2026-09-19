@@ -1,7 +1,9 @@
 # Daily reading
 
-These steps describe the tested setup; its measured battery and final full-disable
-acceptance remain pending. [Current results](validation.md).
+These steps describe the accepted reading setup as of 19 September 2026. Maintenance
+servers are closed, and Bluetooth and the mapper remain ready for reading. Controlled
+battery comparisons and full feature-disable testing remain unperformed.
+[Current results](validation.md).
 
 ## Ordinary use
 
@@ -15,7 +17,8 @@ control; it is not the RIGHT direction on the ring.
 
 For a break, use the Kindle's normal power button to sleep. Wake it normally afterward.
 The remote need not wake a deeply sleeping Kindle. Three physical sleep/wake checks
-passed in manual testing; retained kernel proof and measured battery acceptance are pending.
+passed in manual testing; later kernel counters and PM timestamps confirmed actual suspend.
+The owner accepts the observed battery use, with [measurement limits](battery.md).
 If the remote powered itself off, turn it on; do not re-pair as a routine reconnect step.
 
 ## After reboot
@@ -40,10 +43,17 @@ configured. Not every possible modal dialog has been tested.
 
 Powering off J6 does not stop the Kindle services. Existing controls include Button
 Mapper's Device → Stop and BT Manager's HID daemon toggle, but **the complete disable /
-native Bluetooth restoration procedure is still awaiting its bounded test**. Do not
+native Bluetooth restoration procedure has not been tested**. Do not
 treat an idle control API as proof that all feature processes stopped. See
 [troubleshooting and rollback](troubleshooting.md) before a full maintenance shutdown.
 
-Start/Stop Remote Recovery and KOReader SSH are maintenance tools. Leave them off for
-ordinary reading and battery observations. The mapping helper can stay after opening
-its UI; its targeted cleanup is also a maintenance step, not a page-turn dependency.
+Keep the Bluetooth host and mapper enabled between normal reading sessions; use normal
+Kindle sleep. Powering off the remote is optional. Remote wake from deep sleep is not part of the
+tested routine.
+
+Start/Stop Remote Recovery and KOReader SSH are maintenance tools. Both were closed at
+handoff; leave them off for ordinary reading. Turn Wi-Fi off through the normal control
+while retaining Bluetooth. The mapping helper may remain running after opening its UI;
+its targeted cleanup is a maintenance step, not a page-turn dependency. The recovery
+shortcuts and backups remain installed for future troubleshooting. See the
+[component catalog](installed-layout.md).

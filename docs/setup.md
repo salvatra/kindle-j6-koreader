@@ -159,5 +159,7 @@ Test normal Kindle sleep, actual suspend, on-device restart, scope/no-op behavio
 before battery intervals. Keep Wi-Fi off while retaining Bluetooth. Do not use sleep
 inhibitors, fake touches, wake locks or a screen-off substitute for suspend.
 
-The reference's full battery/disable acceptance is unfinished. Recreating its successful
-page actions is useful, but does not make a new installation fully validated.
+The reference owner accepted observed battery use and requested setup closure. Controlled
+battery comparisons and full feature-disable/rollback checks remain unperformed, as
+recorded in the [final setup record](final-record.md). Recreating its successful page
+actions does not establish the sleep or battery behavior of a different installation.

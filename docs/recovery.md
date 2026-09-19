@@ -7,8 +7,11 @@ application/plugin failure **while the OS and Wi-Fi work**, not failed-boot reco
 
 The public controller additionally accepts a validated, configurable single RFC1918
 client address. This generalization is covered by host mocks, **not a new on-device
-test**. It has not replaced the controller on the reference Kindle during its battery
-trial. There are no binaries or credentials in this repository.
+test**. It has not replaced the controller on the reference Kindle. Independent
+key-only access was verified again at final cleanup on 19 September, then both SSH
+servers and their exact temporary firewall rules were closed. The recovery files and
+shortcuts remain available on demand. There are no binaries or credentials in this
+repository. [Final setup record](final-record.md).
 
 ## Prepare on the development host
 

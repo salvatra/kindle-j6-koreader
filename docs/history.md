@@ -22,8 +22,12 @@ and unredacted diagnostic logs are excluded.
 | Maintenance interruption | Wi-Fi networks absent once; Kindle rebooted | Cause unestablished; prior kernel-counter comparison no longer usable |
 | Recovery reconnection | Host DHCP address changed; copied server still restricted to old client | Update only allowance/controller manifest; verify access and clean setup SSH |
 | Reboot startup | BT Manager enabled, then native Button Mapper Start; page pair worked | Manual on-device startup confirmed; boot policy unchanged |
-| Battery preparation | New boot baseline captured; SSH/helper listeners closed | Begin enabled reading/night, then matched disabled comparison; results pending |
+| Battery preparation | New boot baseline captured; SSH/helper listeners closed | Begin enabled reading/night; later owner acceptance ended testing before a disabled comparison |
 | Public packaging | Personal identity present in fixture and local helper configuration | Sanitize fixture, parameterize helpers, preserve code provenance and test separately |
+| Final sleep/battery observation | Same-boot counters rose to seven successful suspends, zero failures; PM timestamps include about 8 h 36 min suspended; owner reports unchanged charge overnight | Accept the owner's reading preference; keep controlled energy comparisons explicitly unmeasured |
+| Final access check | Recovery initially timed out; proposed client-address change failed its guard before writes; fresh connection metadata matched the existing allowance | Preserve the installed recovery configuration; pinned authentication then succeeded |
+| Maintenance closure | Setup SSH exited and removed its own PID file before cleanup could read it | Verify its processes, listener and rules already absent; close only remaining recovery server, then verify preserved reading services |
+| Final handoff | SSH/helper/Inspector listeners absent; loopback reading endpoints and working mapper retained | Keep ready for reading; preserve backups and publish final catalog |
 
 An interrupted early capture and an early diagnostic timeout incompatibility were handled
 as failed preparations, not claimed as successful device tests. The final capture worker

@@ -13,11 +13,12 @@ and the evidence behind it. It builds on Lucas Zampieri's
 [Kindle Button Mapper](https://github.com/zampierilucas/kindle-button-mapper-rs), and
 [KOReader](https://github.com/koreader/koreader).
 
-> **Status — 18 September 2026:** page turning, reconnection, offline reading and manual
-> startup after reboot work on the tested device. **11 of 16 acceptance cases pass.**
-> Measured suspend, battery comparisons, final routine acceptance, and full disable/
-> rollback validation remain pending. There is no battery-life promise or universal
-> compatibility claim. See the [complete results](docs/validation.md).
+> **Status — 19 September 2026:** setup and maintenance cleanup are complete. Page turning,
+> offline use, reconnection, manual reboot startup and actual suspend are confirmed:
+> **12 of 16 full acceptance cases pass.** The owner accepts the reading routine and
+> observed battery use, reporting unchanged displayed charge overnight. Controlled battery
+> comparisons and complete feature-disable/rollback tests were not performed.
+> See the [final setup record](docs/final-record.md) and [complete results](docs/validation.md).
 
 ## What is new here?
 
@@ -43,7 +44,7 @@ explains their origin and limits.
 
 We have not rewritten the Bluetooth stack or replaced the bundled KOReader plugin.
 The new public helper configuration is covered by host tests; it has **not** been
-redeployed to the Kindle during the battery trial. [Attribution and licensing](NOTICE.md).
+deployed to the reference Kindle. [Attribution and licensing](NOTICE.md).
 
 ## Tested combination
 
@@ -122,8 +123,10 @@ was needed for that manual startup check. [Details and remaining limits](docs/da
 | [Installation](docs/setup.md) | Ordered recovery, KPM, patch and mapping procedure |
 | [Build](docs/build.md) | Exact source/toolchain pins, tests, ARM output and provenance |
 | [Recovery](docs/recovery.md) | Optional key-only maintenance shell and its limits |
+| [Installed components](docs/installed-layout.md) | What stays on Kindle, what runs while reading, and maintenance cleanup |
 | [Troubleshooting / rollback](docs/troubleshooting.md) | Identify a failing layer and preserve a working setup |
-| [Battery and sleep](docs/battery.md) | Fair enabled/disabled measurements; current results pending |
+| [Battery and sleep](docs/battery.md) | Accepted observations, measured suspend and comparison limits |
+| [Final setup record](docs/final-record.md) | Dated cleanup result, retained runtime and evidence |
 | [Validation](docs/validation.md) | What passed, what did not, and what was actually measured |
 | [Experiment history](docs/history.md) | Sanitized account of the setup, failed baseline and targeted fix |
 

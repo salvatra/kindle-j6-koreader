@@ -11,8 +11,10 @@ docs/battery.md
 docs/build.md
 docs/daily-use.md
 docs/design.md
+docs/final-record.md
 docs/fixtures.md
 docs/history.md
+docs/installed-layout.md
 docs/recovery.md
 docs/setup.md
 docs/troubleshooting.md
